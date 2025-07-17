@@ -1,43 +1,52 @@
-# Hyperledger Indy Örnekleri
+# DID Tutorial - Dijital Kimlik Öğretici
 
-Bu repo, Hyperledger Indy kullanarak Self-Sovereign Identity (SSI) uygulamaları geliştirmek için çeşitli örnekler içermektedir.
+Bu uygulama, Merkezi Olmayan Kimlik Tanımlayıcıları (DID) ve Dijital Kimlik kavramlarını görsel ve interaktif bir şekilde öğreten bir eğitim aracıdır. Uygulama, kullanıcılara adım adım DID oluşturma, imzalama, doğrulama ve yaş doğrulama süreçlerini deneyimleme imkanı sağlar.
 
-## Örnekler
+## Özellikler
 
-### 1. ChainFlow SSI Login
+- **Ed25519 Anahtar Çifti Oluşturma**: Güvenli kriptografik anahtar çiftleri oluşturma
+- **DID Oluşturma**: Merkezi olmayan kimlik tanımlayıcıları oluşturma
+- **DID Dokümanı Görüntüleme**: DID'lerin yapısını ve içeriğini anlama
+- **Testnet Simülasyonu**: DID'lerin blok zincirinde nasıl yayınlandığını görme
+- **Sıfır-Bilgi Kanıtları**: Bilgiyi açıklamadan doğrulama kavramını öğrenme
+- **Yaş Doğrulama**: Verifiable Credentials ile yaş doğrulama örneği
+- **İnteraktif Öğrenme**: Adım adım rehberlik eden bir öğretici akışı
 
-ChainFlow platformu için SSI tabanlı giriş sistemi. Klasik şifre tabanlı giriş yerine DID ve Doğrulanabilir Kimlik Bilgileri (Verifiable Credentials) kullanarak Sıfır Bilgi İspatı (Zero Knowledge Proof) ile güvenli giriş sağlar.
+## Teknolojiler
 
-```
-/examples/chainflow-login/
-```
+- React
+- TypeScript
+- Tailwind CSS
+- TweetNaCl.js (Ed25519 kriptografi)
+- BS58 (Base58 kodlama)
+- React Router
 
-#### Özellikler
-- DIDComm protokolü ile güvenli iletişim
-- Sıfır Bilgi İspatı ile minimal veri paylaşımı
-- Sadece gerekli bilgilerin (DID, kanıt ID, kimlik bilgisi sona erme tarihi) saklanması
-- Adım adım UI geri bildirimi
+## Kurulum
 
-#### Kurulum ve Çalıştırma
+1. Bağımlılıkları yükleyin:
+   ```
+   npm install
+   ```
 
-```bash
-cd examples/chainflow-login
-pip install -r requirements.txt
-python app.py
-```
+2. Geliştirme sunucusunu başlatın:
+   ```
+   npm start
+   ```
 
-### 2. Diğer Örnekler (Yakında Eklenecek)
+3. Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresine gidin.
 
-## Gereksinimler
+## Kullanım
 
-- Python 3.10 veya 3.11 (3.13 ile uyumluluk sorunları var)
-- Hyperledger Indy SDK
-- FastAPI, Uvicorn
-- Diğer bağımlılıklar için her örneğin kendi requirements.txt dosyasına bakın
+Uygulama dört ana adımdan oluşur:
 
-## Katkıda Bulunma
+1. **Kayıt Ol**:  Anahtar çifti oluşturun ve DID elde edin.
+2. **Testnet'e Gönder**: DID'inizi simüle edilmiş bir testnet'e gönderin ve DID dokümanını görün.
+3. **Giriş Yap**: Özel anahtarınızla mesaj imzalayarak kimliğinizi doğrulayın.
+4. **Öğrendiklerim**: DID, Verkey ve imzalama kavramlarını özetleyen bilgileri inceleyin.
 
-Yeni örnekler eklemek veya mevcut örnekleri geliştirmek için pull request gönderebilirsiniz.
+## Not
+
+Bu uygulama tamamen istemci tarafında çalışır ve hiçbir gerçek blockchain veya DID kaydı yapmaz. Tüm işlemler tarayıcınızda gerçekleşir ve özel anahtarınız yalnızca tarayıcınızın yerel depolama alanında saklanır.
 
 ## Lisans
 
