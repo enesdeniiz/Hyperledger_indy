@@ -1,14 +1,16 @@
-# DID Tutorial - İnteraktif Öğrenme Uygulaması
+# DID Tutorial - Dijital Kimlik Öğretici
 
-Bu uygulama, Dijital Kimlik (DID) ve doğrulama anahtarı (Verkey) kavramlarını görsel ve interaktif bir şekilde öğreten bir React ve Tailwind CSS uygulamasıdır. Anders Brownworth'un blockchain demo sitesinden ilham alınmıştır.
+Bu uygulama, Merkezi Olmayan Kimlik Tanımlayıcıları (DID) ve Dijital Kimlik kavramlarını görsel ve interaktif bir şekilde öğreten bir eğitim aracıdır. Uygulama, kullanıcılara adım adım DID oluşturma, imzalama, doğrulama ve yaş doğrulama süreçlerini deneyimleme imkanı sağlar.
 
 ## Özellikler
 
-- Ed25519 anahtar çifti oluşturma ve DID oluşturma
-- DID'in simüle edilmiş bir testnet'e kaydedilmesi
-- DID dokümanı görüntüleme
-- Dijital imza oluşturma ve doğrulama
-- Öğrenilen kavramların özeti
+- **Ed25519 Anahtar Çifti Oluşturma**: Güvenli kriptografik anahtar çiftleri oluşturma
+- **DID Oluşturma**: Merkezi olmayan kimlik tanımlayıcıları oluşturma
+- **DID Dokümanı Görüntüleme**: DID'lerin yapısını ve içeriğini anlama
+- **Testnet Simülasyonu**: DID'lerin blok zincirinde nasıl yayınlandığını görme
+- **Sıfır-Bilgi Kanıtları**: Bilgiyi açıklamadan doğrulama kavramını öğrenme
+- **Yaş Doğrulama**: Verifiable Credentials ile yaş doğrulama örneği
+- **İnteraktif Öğrenme**: Adım adım rehberlik eden bir öğretici akışı
 
 ## Teknolojiler
 
@@ -37,7 +39,7 @@ Bu uygulama, Dijital Kimlik (DID) ve doğrulama anahtarı (Verkey) kavramların�
 
 Uygulama dört ana adımdan oluşur:
 
-1. **Kayıt Ol**: Ed25519 anahtar çifti oluşturun ve DID elde edin.
+1. **Kayıt Ol**:  Anahtar çifti oluşturun ve DID elde edin.
 2. **Testnet'e Gönder**: DID'inizi simüle edilmiş bir testnet'e gönderin ve DID dokümanını görün.
 3. **Giriş Yap**: Özel anahtarınızla mesaj imzalayarak kimliğinizi doğrulayın.
 4. **Öğrendiklerim**: DID, Verkey ve imzalama kavramlarını özetleyen bilgileri inceleyin.

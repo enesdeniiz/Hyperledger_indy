@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getFromLocalStorage, signMessage, verifySignature } from '../utils/cryptoUtils';
+import { useNavigate, Link } from 'react-router-dom';
+import { getFromLocalStorage, signMessage, verifySignature, verifyAgeCredential } from '../utils/cryptoUtils';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -12,30 +12,36 @@ const LoginPage: React.FC = () => {
   const [verificationError, setVerificationError] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [showAnimation, setShowAnimation] = useState<boolean>(false);
+  const [ageVerified, setAgeVerified] = useState<boolean>(false);
+  const [userData, setUserData] = useState<any>(null);
 
   // Sabit mesaj
   const loginMessage = "DID ile Giriş Yapıyorum";
 
-  // LocalStorage'dan DID ve anahtar çiftini kontrol et
+  // LocalStorage'dan DID, anahtar çifti ve kullanıcı verilerini kontrol et
   useEffect(() => {
     const storedDid = getFromLocalStorage('did');
     const storedKeyPair = getFromLocalStorage('didKeyPair');
-    const didSubmitted = getFromLocalStorage('didSubmitted');
+    const storedUserData = getFromLocalStorage('userData');
+    const storedCredential = getFromLocalStorage('userCredential');
     
     if (!storedDid || !storedKeyPair) {
       // DID veya anahtar çifti yoksa kayıt sayfasına yönlendir
       navigate('/register');
       return;
     }
-
-    if (!didSubmitted) {
-      // DID testnet'e gönderilmemişse testnet sayfasına yönlendir
-      navigate('/testnet');
-      return;
-    }
     
     setDid(storedDid);
     setKeyPair(storedKeyPair);
+    
+    if (storedUserData) {
+      setUserData(storedUserData);
+    }
+    
+    if (storedCredential) {
+      // Yaş doğrulama bilgisini al ama doğum tarihini alma
+      setAgeVerified(storedCredential.isAdult);
+    }
   }, [navigate]);
 
   const handleSignMessage = () => {
@@ -63,10 +69,30 @@ const LoginPage: React.FC = () => {
         if (isValid) {
           setIsVerified(true);
           setVerificationError('');
-          setCurrentStep(2);
           
-          // Başarılı giriş bilgisini kaydet
-          localStorage.setItem('lastLogin', new Date().toISOString());
+          // Yaş doğrulama kimlik bilgisini doğrula
+          const credential = getFromLocalStorage('userCredential');
+          if (credential) {
+            // Credential'i doğrudan kullan, verifyAgeCredential fonksiyonunu çağırma
+            // Bu hata veriyor olabilir
+            setAgeVerified(credential.isAdult);
+            
+            // 18 yaş kontrolü
+            if (!credential.isAdult) {
+              // 18 yaşından küçükse hata ver
+              setVerificationError('Giriş yapılamadı! Bu uygulama için 18 yaşından büyük olmanız gerekmektedir.');
+              setCurrentStep(1); // İmza doğrulama adımında kal
+              // 18 yaşından küçük olsa da devam etme seçeneği sun
+            } else {
+              // 18 yaşından büyükse devam et
+              setCurrentStep(2);
+              // Başarılı giriş bilgisini kaydet
+              localStorage.setItem('lastLogin', new Date().toISOString());
+            }
+          } else {
+            setVerificationError('Yaş doğrulama kimlik bilgisi bulunamadı. Lütfen tekrar kayıt olun.');
+            setCurrentStep(1);
+          }
         } else {
           setIsVerified(false);
           setVerificationError('İmza doğrulanamadı. Lütfen tekrar deneyin.');
@@ -89,6 +115,9 @@ const LoginPage: React.FC = () => {
   return (
     <div className="animate-fade-in">
       <h1 className="heading text-center text-3xl mb-8">DID ile Giriş Yapma</h1>
+      <p className="text-center font-semibold text-lg mb-4">
+        "Bir bilgiyi bildiğini ispatla, ama bana o bilgiyi gösterme!"
+      </p>
       
       <div className="max-w-3xl mx-auto">
         <div className="step-card">
@@ -101,6 +130,39 @@ const LoginPage: React.FC = () => {
               DID sistemlerinde kimlik doğrulama, özel anahtarınızla bir mesajı imzalayarak gerçekleştirilir.
               Bu imza, genel anahtarınız (Verkey) kullanılarak doğrulanabilir.
             </p>
+            <div className="border border-gray-200 rounded-lg p-4 mb-4 bg-white">
+  <h3 className="font-bold text-lg mb-4">Melike Şifreyi Biliyor mu?</h3>
+
+  <div className="bg-blue-50 p-4 rounded-lg mb-6">
+    <p className="font-semibold mb-2">🎬 Karakterler:</p>
+    <ul className="list-disc pl-5">
+      <li><strong>Enes:</strong> Doğrulayıcı – sadece "evet" ya da "hayır" cevabını ister.</li>
+      <li><strong>Melike:</strong> Bilgi sahibi – gizli bir bilgiyi (şifreyi) bildiğini ispatlamak istiyor ama şifreyi söylemeden.</li>
+    </ul>
+  </div>
+
+  <div className="bg-yellow-50 p-4 rounded-lg mb-6">
+    <p className="font-semibold mb-2">🔐 Durum: Gizli Kapı ve Şifre</p>
+    <p>Melike, şifreli bir kapının olduğu bir odaya gider. Bu kapıyı açmak için özel bir şifre gerekir.</p>
+    <p className="mt-2">💬 Enes: "Eğer şifreyi gerçekten biliyorsan, kapının diğer tarafından geri çıkabilmelisin!"</p>
+  </div>
+
+  <div className="border border-gray-300 rounded-lg p-4 mb-6">
+    <div className="flex justify-center mb-4">
+      <div className="relative">
+        <img src="/images/Adsız tasarım.png" alt="Zero Knowledge Proof Diagram" className="max-w-full h-auto" />
+      </div>
+    </div>
+  </div>
+
+  <div className="bg-green-50 p-4 rounded-lg">
+    <p className="font-semibold mb-2">✅ Sonuç: Melike Gerçekten Şifreyi Biliyor ama Şifreyi Hiç Söylemiyor!</p>
+    <p>Enes, Melike'nin kapıyı açabildiğini görür → "Şifreyi bildiğinden emin olur."</p>
+    <p className="font-semibold mt-2">Ama Melike'nin şifresinin ne olduğunu hiç öğrenmez.</p>
+  </div>
+</div>
+
+            
             <p>
               Bu adımda, "<strong>{loginMessage}</strong>" mesajını özel anahtarınızla imzalayarak 
               kimliğinizi doğrulayacaksınız.
@@ -167,6 +229,31 @@ const LoginPage: React.FC = () => {
               {verificationError && (
                 <div className="error-box mt-4">
                   <p>{verificationError}</p>
+                  
+                  {/* 18 yaşından küçük kullanıcılar için butonlar */}
+                  {verificationError.includes('18 yaşından büyük') && (
+                    <div className="mt-4 flex flex-col items-center space-y-3">
+                      <Link to="/learned" className="btn btn-primary px-6 py-2">
+                        Devam Et: Öğrendiklerinizi Gözden Geçirin
+                      </Link>
+                      <button 
+                        onClick={() => {
+                          // Tüm verileri sıfırla
+                          localStorage.removeItem('didKeyPair');
+                          localStorage.removeItem('did');
+                          localStorage.removeItem('userData');
+                          localStorage.removeItem('userCredential');
+                          localStorage.removeItem('ageCredential');
+                          localStorage.removeItem('currentStep');
+                          // Ana sayfaya yönlendir
+                          window.location.href = '/';
+                        }}
+                        className="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded"
+                      >
+                        Sıfırla ve Yeni Anahtar Çifti Oluştur
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -205,6 +292,34 @@ const LoginPage: React.FC = () => {
                 <p className="text-sm mt-2">
                   İmzanız geçerli ve DID'iniz <span className="text-highlight">{did}</span> ile eşleşiyor.
                   Artık sisteme giriş yaptınız.
+                </p>
+              </div>
+              
+              {/* Yaş doğrulama bilgisini göster */}
+              <div className="did-card mb-6 mt-6">
+                <div className="did-card-inner">
+                  <div className="did-card-chip"></div>
+                  <div className="mb-4">
+                    <div className="text-xs opacity-70">Ad Soyad</div>
+                    <div className="text-xl">{userData?.firstName} {userData?.lastName}</div>
+                  </div>
+                  <div className="mb-4">
+                    <div className="text-xs opacity-70">Kimlik Doğrulama</div>
+                    <div className="text-sm font-semibold text-green-600">
+                      {ageVerified ? '18 Yaş Üstü Doğrulandı' : '18 Yaş Altı'}
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <div className="text-xs opacity-70">DID</div>
+                    <div className="text-sm font-mono">{did.substring(0, 16)}...</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="info-box">
+                <p className="font-medium">Yaş doğrulama kimliğiniz başarıyla doğrulandı!</p>
+                <p className="text-sm mt-1">
+                  Doğum tarihiniz sistemde saklanmadan, sadece yaşınızın 18'den büyük olup olmadığı bilgisi doğrulandı.
                 </p>
               </div>
               

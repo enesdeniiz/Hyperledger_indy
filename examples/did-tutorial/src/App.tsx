@@ -5,14 +5,19 @@ import TestnetPage from './pages/TestnetPage';
 import LoginPage from './pages/LoginPage';
 import LearnedPage from './pages/LearnedPage';
 import HomePage from './pages/HomePage';
+import ScrollToTop from './components/ScrollToTop';
 
 const App: React.FC = () => {
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen">
         <header className="bg-primary-700 text-white shadow-md">
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold">DID Öğretici</h1>
+          <div className="text-xl font-bold">
+            DID Tutorial
+          </div>
+
             <nav>
               <ul className="flex space-x-4">
                 <li>
@@ -53,6 +58,7 @@ const App: React.FC = () => {
             <p className="text-center text-sm mt-2">
               Bu uygulama eğitim amaçlıdır ve gerçek bir DID sistemi ile bağlantılı değildir.
             </p>
+
           </div>
         </footer>
       </div>

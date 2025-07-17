@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom';
 const HomePage: React.FC = () => {
   return (
     <div className="animate-fade-in">
-      <div className="text-center mb-12">
+      <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-primary-800 mb-4">Dijital Kimlik (DID) Öğretici</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
           Bu interaktif uygulama ile Dijital Kimlik (DID), Verkey ve imzalama kavramlarını
           pratik yaparak öğrenin.
         </p>
+        <Link to="/register" className="btn btn-primary px-20 py-10 text-xl font-bold inline-block shadow-lg hover:shadow-xl transition-all">
+          HEMEN BAŞLA
+        </Link>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -17,9 +20,10 @@ const HomePage: React.FC = () => {
           <div className="step-number">1</div>
           <h3 className="step-title mb-2">Kayıt Ol</h3>
           <p className="text-gray-600 mb-4">
-            Ed25519 anahtar çifti oluşturun ve kendi DID'inizi elde edin.
+            Anahtar çifti oluşturun ve kendi DID'inizi elde edin.
           </p>
           <Link to="/register" className="btn btn-primary block text-center">Başla</Link>
+
         </div>
 
         <div className="card card-hover bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200">
@@ -53,12 +57,15 @@ const HomePage: React.FC = () => {
       <div className="bg-secondary-50 rounded-lg p-6 border border-secondary-200 mb-8">
         <h2 className="text-2xl font-bold text-secondary-800 mb-4">Bu Uygulama Hakkında</h2>
         <p className="mb-4">
-          Bu uygulama, Anders Brownworth'un blockchain demo sitesinden ilham alınarak, 
-          dijital kimlik kavramlarını interaktif bir şekilde öğretmek için tasarlanmıştır.
         </p>
         <p className="mb-4">
-          Tüm işlemler tarayıcınızda gerçekleşir ve hiçbir veri sunucuya gönderilmez. 
-          Özel anahtarınız yalnızca tarayıcınızın yerel depolama alanında saklanır.
+        Bu uygulama, dijital kimlik (DID) kavramlarını kullanıcı dostu ve etkileşimli bir şekilde öğretmek amacıyla geliştirilmiştir. Amaç, kullanıcıların merkeziyetsiz kimliklerin nasıl oluşturulduğunu ve doğrulama süreçlerinin nasıl işlediğini temel düzeyde deneyimlemelerini sağlamaktır.
+
+Veri Güvenliği:
+Tüm işlemler yalnızca tarayıcınız üzerinde gerçekleşir. Özel anahtarınız ve diğer tüm bilgiler cihazınızın yerel depolama alanında saklanır ve asla bir sunucuya gönderilmez.
+
+Not:
+Bu uygulama sadece eğitim ve test amaçlıdır. Gerçek bir dijital kimlik altyapısına bağlı değildir ve herhangi bir resmi kimlik doğrulama süreciyle entegre çalışmaz. Uygulama, herhangi bir güvenlik riski oluşturmamakla birlikte, gerçek kimlik verileriyle kullanılmamalıdır.
         </p>
         <p>
           <strong>Not:</strong> Bu uygulama eğitim amaçlıdır ve gerçek bir DID sistemi ile bağlantılı değildir.
@@ -66,9 +73,7 @@ const HomePage: React.FC = () => {
       </div>
 
       <div className="text-center">
-        <Link to="/register" className="btn btn-primary px-8 py-3 text-lg">
-          Hemen Başla
-        </Link>
+     
       </div>
     </div>
   );
